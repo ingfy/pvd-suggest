@@ -25,12 +25,11 @@ describe('pvd-suggest', function () {
                 output[0].date.getMonth().should.equal(8);  // Forventer at første forslag er 26.09.2015
             });
 
-            it('should create suggestions [31.]', function () {
-                var output = pvdSuggest.createSuggestions(sep14_to_may15, '31.', 5);
-
-                console.log(output);
+            it('should create suggestions [26.1]', function () {
+                var output = pvdSuggest.createSuggestions(sep14_to_may15, '26.1', 3);
 
                 output.length.should.be.greaterThan(0);
+                output[0].date.getMonth().should.equal(0);
             });
         });
     });
@@ -54,6 +53,12 @@ describe('pvd-suggest', function () {
 
             it('should create suggestions [31]', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '31', 5);
+
+                output.length.should.equal(5);
+            });
+
+            it('should create suggestions [31.]', function () {
+                var output = pvdSuggest.createSuggestions(oct14_to_may15, '31.', 5);
 
                 output.length.should.equal(5);
             });
