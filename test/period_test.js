@@ -9,7 +9,7 @@ var period = require('../lib/period'),
 describe('period', function () {
     describe('Period', function () {
         it('should correctly calculate Period#includes', function () {
-            var p = period.from(new Month(2009, 7)).to(new Month(2009, 10)),
+            var p = Period.from(new Month(2009, 7)).to(new Month(2009, 10)),
                 before = new Month(2009, 6),
                 atStart = new Month(2009, 7),
                 atEnd = new Month(2009, 10),
@@ -23,6 +23,30 @@ describe('period', function () {
             p.includes(after).should.equal(false);
             p.includes(nextYear).should.equal(false);
             p.includes(prevYear).should.equal(false);
+        });
+
+        describe('Period#countMonths should correctly count', function () {
+            it('months within same year', function () {
+                var p = Period.from(2015, 0).to(2015, 3);
+
+                p.countMonths().should.equal(4);
+            });
+
+            it('months in different years with less than a year apart', function () {
+                var p1 = Period.from(2014, 10).to(2015, 3);
+
+                p1.countMonths().should.equal(6);
+
+                var p2 = Period.from(2014, 11).to(2015, 0);
+
+                p2.countMonths().should.equal(2);
+            });
+
+            it('months in different years with more than a year apart', function () {
+                var p = Period.from(2014, 6).to(2015, 6);
+
+                p.countMonths().should.equal(13);
+            });
         });
     });
 

@@ -10,4 +10,10 @@
 
 var pvdSuggest = require('../');
 
-console.log(pvdSuggest()); // "awesome"
+var period = pvdSuggest.Period.from(2014, 9).to(2015, 4);  // October 14 to May 15
+
+var input = '01';
+
+var num = 5;
+
+console.log(pvdSuggest.createSuggestions(period, input, num)); // [01.10.2014, ...]
