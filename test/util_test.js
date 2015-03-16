@@ -45,6 +45,19 @@ describe('util', function () {
         });
     });
 
+    describe('linspaceElements', function () {
+        it('should return 3 from 10', function () {
+            var elements = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+            var output =util.linspaceElements(elements, 3);
+
+            output.length.should.equal(3);
+            output[0].should.equal(0);
+            output[1].should.equal(5);
+            output[2].should.equal(10);
+        });
+    });
+
     describe('linspace', function () {
         it('should return empty when asked for 0', function () {
             var result = util.linspace(1, 10, 0);

@@ -4,6 +4,30 @@ var pvdSuggest = require('../');
 var assert = require('should');
 
 describe('pvd-suggest', function () {
+    describe('single year', function () {
+        describe('incomplete', function () {
+            var oct14_to_may15 = pvdSuggest.Period.from(2014, 9).to(2015, 4);
+
+            it('should create suggestion [03.11.1]', function () {
+                var output = pvdSuggest.createSuggestions(oct14_to_may15, '03.11.1', 5);
+
+                output.length.should.equal(1);
+                output[0].date.getFullYear().should.equal(2014);
+                output[0].date.getMonth().should.equal(10);
+                output[0].date.getDate().should.equal(3);
+            });
+
+            it('should create suggestion [31.12.2014]', function () {
+                var output = pvdSuggest.createSuggestions(oct14_to_may15, '31.12.2014', 5);
+
+                output.length.should.equal(1);
+                output[0].date.getFullYear().should.equal(2014);
+                output[0].date.getMonth().should.equal(11);
+                output[0].date.getDate().should.equal(31);
+            });
+        });
+    });
+
     describe('single month', function () {
         describe('complete', function () {
             var oct14_to_may15 = pvdSuggest.Period.from(2014, 9).to(2015, 4);
@@ -12,6 +36,9 @@ describe('pvd-suggest', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '01.12', 5);
 
                 output.length.should.equal(1);
+                output[0].date.getFullYear().should.equal(2014);
+                output[0].date.getMonth().should.equal(11);
+                output[0].date.getDate().should.equal(1);
             });
         });
 
