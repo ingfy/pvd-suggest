@@ -5,6 +5,7 @@ var assert = require('should');
 
 describe('pvd-suggest', function () {
     var oct14_to_may15 = pvdSuggest.Period.from(2014, 9).to(2015, 4);
+    var jan99_to_jan14 = pvdSuggest.Period.from(1999, 0).to(2014, 0);
 
     describe('single hours', function () {
         describe('complete', function () {
@@ -26,7 +27,7 @@ describe('pvd-suggest', function () {
             it('should create suggestion [31.12.2014]', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '31.12.2014', 5);
 
-                output.length.should.equal(1);
+                output.length.should.equal(5);
                 output[0].date.getFullYear().should.equal(2014);
                 output[0].date.getMonth().should.equal(11);
                 output[0].date.getDate().should.equal(31);
@@ -37,10 +38,16 @@ describe('pvd-suggest', function () {
             it('should create suggestion [03.11.1]', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '03.11.1', 5);
 
-                output.length.should.equal(1);
+                output.length.should.equal(5);
                 output[0].date.getFullYear().should.equal(2014);
                 output[0].date.getMonth().should.equal(10);
                 output[0].date.getDate().should.equal(3);
+            });
+
+            it('should create many suggestions for long periods', function () {
+                var output = pvdSuggest.createSuggestions(jan99_to_jan14, '01.10.2', 20);
+
+                output.length.should.equal(20);
             });
         });
     });
