@@ -25,6 +25,40 @@ describe('period', function () {
             p.includes(prevYear).should.equal(false);
         });
 
+        describe('Period#getMonthsWithNr', function () {
+            it('should find for several years', function () {
+                var period = Period.from(2011, 3).to(2020, 8);
+
+                var months = period.getMonthsWithNr(4);
+
+                months.length.should.equal(10);
+            });
+
+            it('should find for period shorter than a year', function () {
+                var period = Period.from(2015, 3).to(2015, 7);
+
+                var months = period.getMonthsWithNr(7);
+
+                months.length.should.equal(1);
+            });
+
+            it('should find none when no nr matches', function () {
+                var period = Period.from(1999, 3).to(1999, 11);
+
+                var months = period.getMonthsWithNr(0);
+
+                months.length.should.equal(0);
+            });
+        });
+
+        describe('Period#countYears', function () {
+            it('should correctly count same year', function () {
+                var p = Period.from(2015, 0).to(2015, 2);
+
+                p.countYears().should.equal(1);
+            });
+        });
+
         describe('Period#countMonths should correctly count', function () {
             it('months within same year', function () {
                 var p = Period.from(2015, 0).to(2015, 3);
@@ -51,6 +85,40 @@ describe('period', function () {
     });
 
     describe('Month', function () {
+        describe('Month#next', function () {
+            it('should correctly find next within year', function () {
+                var input = new Month(2014, 3);
+                var output = input.next();
+
+                output.year.should.equal(2014);
+                output.nr.should.equal(4);
+            });
+
+            it('should correctly find next in year change', function () {
+                var input = new Month(2011, 11);
+                var output = input.next();
+
+                output.year.should.equal(2012);
+                output.nr.should.equal(0);
+            });
+
+            it('should correctly find next 6 within year', function () {
+                var input = new Month(2010, 3);
+                var output = input.next(6);
+
+                output.year.should.equal(2010);
+                output.nr.should.equal(9);
+            });
+
+            it('should correctly find next 6 in year change', function () {
+                var input = new Month(2010, 10);
+                var output = input.next(6);
+
+                output.year.should.equal(2011);
+                output.nr.should.equal(4);
+            });
+        });
+
         it('should correctly create a month with Month.fromDate', function () {
             var d = new Date('February 1, 2015');
             var m = Month.fromDate(d);

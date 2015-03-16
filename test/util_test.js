@@ -4,6 +4,22 @@ var util = require('../lib/util');
 var assert = require('should');
 
 describe('util', function () {
+    describe('tryCreateSpecificDate', function () {
+        it('should return null on invalid date', function () {
+            var date = util.tryCreateSpecificDate(2015, 1, 29);
+
+            assert(date).is.null;
+        });
+
+        it('should create exactly specificed date', function () {
+            var date = util.tryCreateSpecificDate(2015, 0, 31);
+
+            date.getFullYear().should.equal(2015);
+            date.getMonth().should.equal(0);
+            date.getDate().should.equal(31);
+        });
+    });
+
     describe('take', function () {
         it('should truncate long arrays', function () {
             var input = [1, 2, 3, 4, 5],
