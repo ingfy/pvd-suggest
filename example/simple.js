@@ -14,6 +14,6 @@ var period = pvdSuggest.Period.from(2014, 9).to(2015, 4);  // October 14 to May 
 
 var input = '01';
 
-var num = 2;
+var num = 10;
 
-console.log(pvdSuggest.createSuggestions(period, input, 2)); // [01.10.2014, ...]
+console.log(pvdSuggest.createSuggestions(period, input, num)); // [01.10.2014, ...]

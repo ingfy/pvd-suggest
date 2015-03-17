@@ -4,10 +4,43 @@ var assert = require('should');
 
 var period = require('../lib/period'),
     Period = period.Period,
-    Month = period.Month;
+    Month = period.Month,
+    Day = period.Day;
 
 describe('period', function () {
     describe('Period', function () {
+        describe('Period#includes', function () {
+            it('should work for Day in Month to Month period', function () {
+                var p = Period.from(2010, 0).to(2011, 3),
+                    before = new Day(2009, 11, 30),
+                    after = new Day(2011, 4, 27),
+                    middle = new Day(2010, 9, 14),
+                    inFirst = new Day(2010, 0, 3),
+                    inLast = new Day(2011, 3, 27);
+
+                p.includes(before).should.equal(false);
+                p.includes(after).should.equal(false);
+                p.includes(middle).should.equal(true);
+                p.includes(inFirst).should.equal(true);
+                p.includes(inLast).should.equal(true);
+            });
+
+            it('should work for Day in Day to Month period', function () {
+                var p = Period.from(2010, 0, 27).to(2011, 3),
+                    before = new Day(2009, 0, 26),
+                    after = new Day(2011, 4, 27),
+                    middle = new Day(2010, 9, 14),
+                    inFirst = new Day(2010, 0, 27),
+                    inLast = new Day(2011, 3, 27);
+
+                p.includes(before).should.equal(false, 'same month day before is not included');
+                p.includes(after).should.equal(false);
+                p.includes(middle).should.equal(true, 'middle (' + JSON.stringify(middle) + ') should be included');
+                p.includes(inFirst).should.equal(true, 'first day of first month should be included');
+                p.includes(inLast).should.equal(true, 'day in period\'s last month is included');
+            });
+        });
+
         it('should correctly calculate Period#includes', function () {
             var p = Period.from(new Month(2009, 7)).to(new Month(2009, 10)),
                 before = new Month(2009, 6),
