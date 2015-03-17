@@ -16,4 +16,4 @@ var input = '01';
 
 var num = 10;
 
-console.log(pvdSuggest.createSuggestions(period, input, num)); // [01.10.2014, ...]
+pvdSuggest.createSuggestions(period, input, num); // [01.10.2014, ...]

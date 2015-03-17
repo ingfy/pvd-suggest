@@ -7,6 +7,12 @@ describe('pvd-suggest', function () {
     var oct14_to_may15 = pvdSuggest.Period.from(2014, 9).to(2015, 4);
     var jan99_to_jan14 = pvdSuggest.Period.from(1999, 0).to(2014, 0);
 
+    it('should give default suggestions on gibberish [123ølafk jøq23 æ@æAS__\\\\as\\da\\sd\\as\d\\nsd]', function () {
+        var output = pvdSuggest.createSuggestions(jan99_to_jan14, '123ølafk jøq23 æ@æAS__\\as\da\sd\as\d\nsd', 100);
+
+        output.length.should.equal(100);
+    });
+
     describe('range year', function () {
         describe('incomplete', function () {
             it('should create suggestions for long period [10.10.2010 - 10.10.]', function () {
@@ -19,6 +25,32 @@ describe('pvd-suggest', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '10.10.14 - 10.4', 10)
 
                 output.length.should.equal(10);
+            });
+        });
+
+        describe('complete', function () {
+            it('should create suggestions for full year [1.2.15 - 2.3.15]', function () {
+                var output = pvdSuggest.createSuggestions(oct14_to_may15, '1.2.15 - 2.3.15', 5);
+
+                output.length.should.equal(5);
+                output[0].firstDate.getFullYear().should.equal(2015);
+                output[0].firstDate.getMonth().should.equal(1);
+                output[0].firstDate.getDate().should.equal(1);
+                output[0].secondDate.getFullYear().should.equal(2015);
+                output[0].secondDate.getMonth().should.equal(2);
+                output[0].secondDate.getDate().should.equal(2);
+            });
+
+            it('should create suggestions for full year [1.2.2015 - 2.3.2015]', function () {
+                var output = pvdSuggest.createSuggestions(oct14_to_may15, '1.2.2015 - 2.3.2015', 5);
+
+                output.length.should.equal(5);
+                output[0].firstDate.getFullYear().should.equal(2015);
+                output[0].firstDate.getMonth().should.equal(1);
+                output[0].firstDate.getDate().should.equal(1);
+                output[0].secondDate.getFullYear().should.equal(2015);
+                output[0].secondDate.getMonth().should.equal(2);
+                output[0].secondDate.getDate().should.equal(2);
             });
         });
     });
@@ -214,7 +246,6 @@ describe('pvd-suggest', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '', 5);
 
                 output.length.should.equal(5);
-                output[0].date.getDate().should.equal(1);
             });
 
             it('should create suggestions [0]', function () {
