@@ -61,7 +61,17 @@ describe('util', function () {
             var output = util.linspaceElements([], 10);
 
             output.length.should.equal(0);
-        })
+        });
+
+        it('should return exactly the number of elements asked for', function () {
+            function range(start, stop) {
+                var out = [];
+                for (var i = start; i <= stop; i++) { out.push(i); }
+                return out;
+            }
+            util.linspaceElements(range(1, 61), 50).length.should.equal(50);
+            util.linspaceElements(range(1, 60), 24).length.should.equal(24);
+        });
     });
 
     describe('linspace', function () {
@@ -102,6 +112,11 @@ describe('util', function () {
             result[0].should.equal(-10);
             result[2].should.equal(0);
             result[4].should.equal(10);
+        });
+
+        it('should return exactly the number of elements asked for', function () {
+            util.linspace(1, 61, 50).length.should.equal(50);
+            util.linspace(1, 60, 24).length.should.equal(24);
         });
     })
 });

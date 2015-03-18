@@ -9,55 +9,81 @@ describe('pvd-suggest', function () {
     var sep14_to_may15 = pvdSuggest.Period.from(2014, 8).to(2015, 4);
     var dec14_to_april15 = pvdSuggest.Period.from(2014, 11).to(2015, 3);
     var feb15_to_mar15 = pvdSuggest.Period.from(2015, 1).to(2015, 3);
+    var march15_to_april15 = pvdSuggest.Period.from(2015, 2).to(2015, 3);
 
     it('should give default suggestions on gibberish [123ølafk jøq23 æ@æAS__\\\\as\\da\\sd\\as\d\\nsd]', function () {
         var output = pvdSuggest.createSuggestions(jan99_to_jan14, '123ølafk jøq23 æ@æAS__\\as\da\sd\as\d\nsd', 100);
 
+        assertNoNaN(output);
+
         output.length.should.equal(100);
     });
 
-    xit('should never produce duplicates', function () {
-        var suggestionsAreEqual = (function () {
-            function datesAreEqual(a, b) {
-                return a.getFullYear() === b.getFullYear() &&
-                    a.getMonth() === b.getMonth() &&
-                    a.getDate() === b.getDate();
-            }
+    var assertNoneAreEqual = (function() {
+        function datesAreEqual(a, b) {
+            return a.getFullYear() === b.getFullYear() &&
+                a.getMonth() === b.getMonth() &&
+                a.getDate() === b.getDate();
+        }
 
-            function isSingleDate(suggestion) {
-                return suggestion.date && !suggestion.firstDate && !suggestion.secondDate;
-            }
+        function isSingleDate(suggestion) {
+            return suggestion.type === 'single';
+        }
 
-            function isRange(suggestion) {
-                return suggestion.firstDate && suggestion.secondDate && !suggestion.date && !suggestion.hours;
-            }
+        function isRange(suggestion) {
+            return suggestion.type === 'range';
+        }
 
-            return function (a, b) {
-                if (isSingleDate(a)) {
-                    if (isSingleDate(b)) {
-                        return datesAreEqual(a.date, b.date) && a.hours === b.hours;
-                    }
-                    return false;
-                }
-                if (isRange(b)) {
-                    return datesAreEqual(a.firstDate, b.firstDate) &&
-                        datesAreEqual(a.secondDate, b.secondDate);
+        function suggestionsAreEqual(a, b) {
+            if (isSingleDate(a)) {
+                if (isSingleDate(b)) {
+                    return datesAreEqual(a.date, b.date) && a.hours === b.hours;
                 }
                 return false;
-            };
-        }());
+            }
+            if (isRange(b)) {
+                return datesAreEqual(a.firstDate, b.firstDate) &&
+                    datesAreEqual(a.secondDate, b.secondDate);
+            }
+            return false;
+        }
 
+        return function (output) {
+            output.forEach(function (o1, i1) {
+                output.forEach(function (o2, i2) {  // All combinations
+                    if (i1 !== i2) {    // Don't compare same reference
+                        suggestionsAreEqual(o1, o2).should.not.equal(true, 'Suggestions ' + o1 + ' and ' + o2 + ' should not be equal!');
+                    }
+                });
+            });
+        };
+    }());
+
+    function assertNoNaN(output) {
+        output.forEach(function (o) {
+            (o.type === 'single' && o.hours !== undefined && isNaN(o.hours)).should.not.equal(true, 'NaN detected in ' + o + '!');
+        });
+    }
+
+    it('should not produce NaN hours', function () {
+        var output = pvdSuggest.createSuggestions(march15_to_april15, '', 100);
+
+        assertNoNaN(output);
+
+    });
+
+    it('should not produce duplicates', function () {
+        var output = pvdSuggest.createSuggestions(march15_to_april15, '', 8);
+
+        assertNoneAreEqual(output);
+    });
+
+    xit('should never produce duplicates', function () {
         var output = pvdSuggest.createSuggestions(jan99_to_jan14, '', 110);
 
         output.length.should.equal(110);
 
-        output.forEach(function (o1, i1) {
-            output.forEach(function (o2, i2) {  // All combinations
-                if (i1 !== i2) {    // Don't compare same reference
-                    suggestionsAreEqual(o1, o2).should.not.equal(true, 'Suggestions ' + o1 + ' and ' + o2 + ' should not be equal!');
-                }
-            });
-        });
+        assertNoneAreEqual(output);
     });
 
     describe('range year', function () {
