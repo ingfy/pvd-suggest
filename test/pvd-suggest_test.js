@@ -47,21 +47,15 @@ describe('pvd-suggest', function () {
             };
         }());
 
+        var output = pvdSuggest.createSuggestions(jan99_to_jan14, '', 110);
 
-        var attempts = [];
-        for (var i = 1; i <= 100; i++) { attempts.push(i); }
+        output.length.should.equal(110);
 
-        attempts.forEach(function () {
-            var output = pvdSuggest.createSuggestions(feb15_to_mar15, '', 5);
-
-            output.length.should.equal(5);
-
-            output.forEach(function (o1, i1) {
-                output.forEach(function (o2, i2) {  // All combinations
-                    if (i1 !== i2) {    // Don't compare same reference
-                        suggestionsAreEqual(o1, o2).should.not.equal(true, 'Suggestions ' + o1 + ' and ' + o2 + ' should not be equal!');
-                    }
-                });
+        output.forEach(function (o1, i1) {
+            output.forEach(function (o2, i2) {  // All combinations
+                if (i1 !== i2) {    // Don't compare same reference
+                    suggestionsAreEqual(o1, o2).should.not.equal(true, 'Suggestions ' + o1 + ' and ' + o2 + ' should not be equal!');
+                }
             });
         });
     });
