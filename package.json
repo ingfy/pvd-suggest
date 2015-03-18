@@ -1,7 +1,7 @@
 {
   "name": "pvd-suggest",
   "description": "Suggestion engine for Ciber Prognosis Vacation Dates.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://io.github.com/ingfy/pvd-suggest",
   "bugs": "https://github.com/ingfy/pvd-suggest/issues",
   "license": "MIT",
