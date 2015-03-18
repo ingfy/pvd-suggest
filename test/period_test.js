@@ -102,6 +102,14 @@ describe('period', function () {
 
                 months.length.should.equal(0);
             });
+
+            it('should find none when no nr matches', function () {
+                var period = Period.from(2015, 2).to(2015, 3);
+
+                var months = period.getMonthsWithNr(1, 1);
+
+                months.length.should.equal(0);
+            });
         });
 
         describe('Period#countYears', function () {

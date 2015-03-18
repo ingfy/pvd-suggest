@@ -274,6 +274,12 @@ describe('pvd-suggest', function () {
 
     describe('single month', function () {
         describe('complete', function () {
+            it('should not fail on months outside period [01.2]', function() {
+                var output = pvdSuggest.createSuggestions(march15_to_april15, '01.2', 5);
+
+                output.length.should.equal(5);
+            });
+
             it('should create suggestion and backup suggestions [01.12]', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '01.12', 5);
 
