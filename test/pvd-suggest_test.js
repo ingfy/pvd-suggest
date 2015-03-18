@@ -80,6 +80,12 @@ describe('pvd-suggest', function () {
     });
 
     it('should not produce duplicates', function () {
+        var output = pvdSuggest.createSuggestions(march15_to_april15, '01', 5);
+
+        assertNoneAreEqual(output);
+    });
+
+    it('should not produce duplicates', function () {
         var output = pvdSuggest.createSuggestions(feb15_to_april15, '15.03', 5);
 
         assertNoneAreEqual(output);
@@ -315,7 +321,7 @@ describe('pvd-suggest', function () {
             it('should not produce undefined values [01.1]', function () {
                 var output = pvdSuggest.createSuggestions(dec14_to_april15, '01.1', 5);
 
-                output.length.should.equal(5);
+                output.length.should.be.greaterThan(1);
                 output.forEach(function (o) {
                     (o === undefined).should.not.equal(true);
                 });
