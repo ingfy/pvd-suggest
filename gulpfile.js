@@ -32,7 +32,7 @@ gulp.task('browserify', ['clean-dist'], function () {
 
   var browserified = transform(function(filename) {
     var b = browserify();
-    b.require(filename, {expose: moduleName})
+    b.require(filename, {expose: moduleName});
     return b.bundle();
   });
 

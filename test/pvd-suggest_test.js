@@ -6,6 +6,8 @@ var assert = require('should');
 describe('pvd-suggest', function () {
     var oct14_to_may15 = pvdSuggest.Period.from(2014, 9).to(2015, 4);
     var jan99_to_jan14 = pvdSuggest.Period.from(1999, 0).to(2014, 0);
+    var sep14_to_may15 = pvdSuggest.Period.from(2014, 8).to(2015, 4);
+    var dec14_to_april15 = pvdSuggest.Period.from(2014, 11).to(2015, 3);
 
     it('should give default suggestions on gibberish [123ølafk jøq23 æ@æAS__\\\\as\\da\\sd\\as\d\\nsd]', function () {
         var output = pvdSuggest.createSuggestions(jan99_to_jan14, '123ølafk jøq23 æ@æAS__\\as\da\sd\as\d\nsd', 100);
@@ -195,7 +197,16 @@ describe('pvd-suggest', function () {
         });
 
         describe('incomplete', function () {
-            var sep14_to_may15 = pvdSuggest.Period.from(2014, 8).to(2015, 4);
+
+
+            it('should not produce undefined values [01.1]', function () {
+                var output = pvdSuggest.createSuggestions(dec14_to_april15, '01.1', 5);
+
+                output.length.should.equal(5);
+                output.forEach(function (o) {
+                    (o === undefined).should.not.equal(true);
+                });
+            });
 
             it('should create suggestions [26.0]', function () {
                 var output = pvdSuggest.createSuggestions(sep14_to_may15, '26.0', 5);

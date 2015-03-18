@@ -49,13 +49,19 @@ describe('util', function () {
         it('should return 3 from 10', function () {
             var elements = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-            var output =util.linspaceElements(elements, 3);
+            var output = util.linspaceElements(elements, 3);
 
             output.length.should.equal(3);
             output[0].should.equal(0);
             output[1].should.equal(5);
             output[2].should.equal(10);
         });
+
+        it('should give an empty list from an empty list', function () {
+            var output = util.linspaceElements([], 10);
+
+            output.length.should.equal(0);
+        })
     });
 
     describe('linspace', function () {
