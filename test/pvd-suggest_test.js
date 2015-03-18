@@ -8,7 +8,8 @@ describe('pvd-suggest', function () {
     var jan99_to_jan14 = pvdSuggest.Period.from(1999, 0).to(2014, 0);
     var sep14_to_may15 = pvdSuggest.Period.from(2014, 8).to(2015, 4);
     var dec14_to_april15 = pvdSuggest.Period.from(2014, 11).to(2015, 3);
-    var feb15_to_mar15 = pvdSuggest.Period.from(2015, 1).to(2015, 3);
+    var feb15_to_mar15 = pvdSuggest.Period.from(2015, 1).to(2015, 2);
+    var feb15_to_april15 = pvdSuggest.Period.from(2015, 1).to(2015, 3);
     var march15_to_april15 = pvdSuggest.Period.from(2015, 2).to(2015, 3);
 
     it('should give default suggestions on gibberish [123ølafk jøq23 æ@æAS__\\\\as\\da\\sd\\as\d\\nsd]', function () {
@@ -74,6 +75,12 @@ describe('pvd-suggest', function () {
 
     it('should not produce duplicates', function () {
         var output = pvdSuggest.createSuggestions(march15_to_april15, '', 8);
+
+        assertNoneAreEqual(output);
+    });
+
+    it('should not produce duplicates', function () {
+        var output = pvdSuggest.createSuggestions(feb15_to_april15, '15.03', 5);
 
         assertNoneAreEqual(output);
     });
