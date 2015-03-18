@@ -86,6 +86,25 @@ describe('pvd-suggest', function () {
         assertNoneAreEqual(output);
     });
 
+    it('should suggest all and only hours in [0.5, 7.5]', function () {
+        var output = pvdSuggest.createSuggestions(jan99_to_jan14, '', 110);
+
+        var hours = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5];
+        var targets = hours.map(function (n) { return n; });
+        output.forEach(function (o) {
+            if (o.hours !== undefined) {
+                hours.indexOf(o.hours).should.not.equal(-1, 'found hours not in [0.5, 7.5], ' + o.hours);
+
+                var i = targets.indexOf(o.hours);
+
+                if (i > -1) {
+                    targets.splice(i, 1);
+                }
+            }
+        });
+        targets.length.should.equal(0, 'not all hours in [0.5, 7.5] were suggested. Missed: [' + hours.join(', ') + ']');
+    });
+
     describe('range year', function () {
         describe('incomplete', function () {
             it('should create suggestions for long period [10.10.2010 - 10.10.]', function () {
@@ -199,6 +218,18 @@ describe('pvd-suggest', function () {
                 output[0].date.getMonth().should.equal(9);
                 output[0].date.getDate().should.equal(1);
                 output[0].hours.should.equal(6.0);
+            });
+        });
+
+        describe('incomplete', function () {
+            it('should create suggestions [1.12 2014 0]', function () {
+                var output = pvdSuggest.createSuggestions(oct14_to_may15, '1.12 2014 0', 5);
+
+                output.length.should.equal(5);
+                output[0].date.getFullYear().should.equal(2014);
+                output[0].date.getMonth().should.equal(11);
+                output[0].date.getDate().should.equal(1);
+                output[0].hours.should.equal(0.5);  // Skip 0.0
             });
         });
     });
