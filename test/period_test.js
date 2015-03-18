@@ -9,6 +9,26 @@ var period = require('../lib/period'),
 
 describe('period', function () {
     describe('Period', function () {
+        describe('Period#getDays', function () {
+            it('should find all days in period less than a month', function () {
+                var output = Period.from(2010, 2, 10).to(2010, 2, 14).getDays();
+
+                output.length.should.equal(5);
+            });
+
+            it('should find all days in period crossing month', function () {
+                var output = Period.from(1999, 1, 27).to(1999, 2, 3).getDays();
+
+                output.length.should.equal(5);
+            });
+
+            it('should count all days in long period', function () {
+                var output = Period.from(2001, 0).to(2010, 11, 31).getDays();
+
+                output.length.should.equal(3652);
+            });
+        });
+
         describe('Period#includes', function () {
             it('should work for Day in Month to Month period', function () {
                 var p = Period.from(2010, 0).to(2011, 3),
@@ -118,6 +138,24 @@ describe('period', function () {
     });
 
     describe('Month', function () {
+        describe('Month#prev', function () {
+            it('should correctly find prev within year', function () {
+                var input = new Month(2014, 3);
+                var output = input.prev();
+
+                output.year.should.equal(2014);
+                output.nr.should.equal(2);
+            });
+
+            it('should correctly find prev in year change', function () {
+                var input = new Month(2014, 0);
+                var output = input.prev();
+
+                output.year.should.equal(2013);
+                output.nr.should.equal(11);
+            });
+        });
+
         describe('Month#next', function () {
             it('should correctly find next within year', function () {
                 var input = new Month(2014, 3);
