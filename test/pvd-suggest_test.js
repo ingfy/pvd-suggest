@@ -193,6 +193,17 @@ describe('pvd-suggest', function () {
 
     describe('range day', function () {
         describe('incomplete', function () {
+            it('should create at least one suggestion for [21.4.15 -] in [March 2015 - April 2015]', function () {
+                var output = pvdSuggest.createSuggestions(march15_to_april15, '21.4.15 -', 5);
+                
+                output.length.should.be.greaterThan(1);
+                output[0].type.should.equal('range');
+                output[0].firstDate.getFullYear().should.equal(2015);
+                output[0].firstDate.getMonth().should.equal(3);
+                output[0].firstDate.getDate().should.equal(21);
+                output[0].firstDate.getFullYear().should.equal(2015);
+            });
+
             it('should create backup suggetions for invalid first date for [1.9 2014 - 3]', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '1.9 2014 - 3', 5);
 
