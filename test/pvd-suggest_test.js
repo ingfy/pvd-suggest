@@ -134,6 +134,19 @@ describe('pvd-suggest', function () {
         });
 
         describe('complete', function () {
+            it('should create suggestion including last period day', function () {
+                var output = pvdSuggest.createSuggestions(march15_to_april15, '21.4.15 - 30.4.2015', 5);
+
+                output.length.should.equal(5);
+                output[0].type.should.equal('range');
+                output[0].firstDate.getFullYear().should.equal(2015);
+                output[0].firstDate.getMonth().should.equal(3);
+                output[0].firstDate.getDate().should.equal(21);
+                output[0].secondDate.getFullYear().should.equal(2015);
+                output[0].secondDate.getMonth().should.equal(3);
+                output[0].secondDate.getDate().should.equal(30);
+            });
+
             it('should create suggestions for full year [1.2.15 - 2.3.15]', function () {
                 var output = pvdSuggest.createSuggestions(oct14_to_may15, '1.2.15 - 2.3.15', 5);
 
@@ -195,7 +208,7 @@ describe('pvd-suggest', function () {
         describe('incomplete', function () {
             it('should create at least one suggestion for [21.4.15 -] in [March 2015 - April 2015]', function () {
                 var output = pvdSuggest.createSuggestions(march15_to_april15, '21.4.15 -', 5);
-                
+
                 output.length.should.be.greaterThan(1);
                 output[0].type.should.equal('range');
                 output[0].firstDate.getFullYear().should.equal(2015);
