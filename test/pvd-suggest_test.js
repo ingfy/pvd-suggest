@@ -11,6 +11,7 @@ describe('pvd-suggest', function () {
     var feb15_to_mar15 = pvdSuggest.Period.from(2015, 1).to(2015, 2);
     var feb15_to_april15 = pvdSuggest.Period.from(2015, 1).to(2015, 3);
     var march15_to_april15 = pvdSuggest.Period.from(2015, 2).to(2015, 3);
+    var july15_to_dec15 = pvdSuggest.Period.from(2015, 6).to(2015, 11);
 
     it('should give default suggestions on gibberish [123ølafk jøq23 æ@æAS__\\\\as\\da\\sd\\as\d\\nsd]', function () {
         var output = pvdSuggest.createSuggestions(jan99_to_jan14, '123ølafk jøq23 æ@æAS__\\as\da\sd\as\d\nsd', 100);
@@ -116,6 +117,12 @@ describe('pvd-suggest', function () {
             }
         });
         targets.length.should.equal(0, 'not all hours in [0.5, 7.5] were suggested. Missed: [' + hours.join(', ') + ']');
+    });
+
+    it('should not throw when first day (with default suggest) being last day of period [31.12]', function () {
+        assert.doesNotThrow(function () {
+            pvdSuggest.createSuggestions(july15_to_dec15, '31.12', 5);
+        });
     });
 
     describe('range year', function () {
